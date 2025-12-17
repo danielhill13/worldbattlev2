@@ -1,0 +1,18 @@
+{
+  "name": "world-battle",
+  "version": "1.0.0",
+  "description": "World Battle - Risk-like Strategy Game",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "npm test --workspaces",
+    "engine:test": "npm test --workspace=packages/engine",
+    "api:dev": "npm run dev --workspace=packages/api",
+    "ui:dev": "npm run dev --workspace=packages/ui"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
