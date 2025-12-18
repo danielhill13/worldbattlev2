@@ -21,6 +21,7 @@ export default function ReinforcementPanel({
   const [placements, setPlacements] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [lastClickedTerritory, setLastClickedTerritory] = useState<string | null>(null);
 
   const player = game.players.find(p => p.id === playerId);
   const myTerritories = game.territories.filter(t => t.occupiedBy === playerId);
@@ -29,12 +30,13 @@ export default function ReinforcementPanel({
     loadReinforcementInfo();
   }, [gameId, playerId]);
 
-  // Handle map clicks for quick reinforcement
+  // Handle map clicks for quick reinforcement - only add on NEW territory selection
   useEffect(() => {
-    if (selectedTerritory && remaining > 0) {
+    if (selectedTerritory && selectedTerritory !== lastClickedTerritory && remaining > 0) {
       const territory = myTerritories.find(t => t.territoryId === selectedTerritory);
       if (territory) {
         addArmy(selectedTerritory);
+        setLastClickedTerritory(selectedTerritory);
       }
     }
   }, [selectedTerritory]);
@@ -100,6 +102,11 @@ export default function ReinforcementPanel({
 
       await api.placeReinforcements(gameId, playerId, placementArray);
       setPlacements({});
+      setLastClickedTerritory(null); // Reset for next click
+      
+      // Auto-end phase if no more reinforcements
+      await loadReinforcementInfo();
+      
       onUpdate();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to place reinforcements');
@@ -129,6 +136,7 @@ export default function ReinforcementPanel({
 
     try {
       await api.endReinforcement(gameId, playerId);
+      setLastClickedTerritory(null); // Reset for next phase
       onUpdate();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to end reinforcement phase');

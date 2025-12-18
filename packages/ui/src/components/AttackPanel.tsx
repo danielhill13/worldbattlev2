@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { GameState } from '@world-battle/engine';
 import api from '../utils/api';
 import { areTerritoriesAdjacentUI } from '../utils/adjacency';

@@ -19,7 +19,11 @@ export default function HomePage() {
     setError('');
 
     try {
-      const { gameId } = await api.createGame(playerName.trim());
+      const { gameId, game } = await api.createGame(playerName.trim());
+      // Store player ID for this game
+      if (game.players.length > 0) {
+        localStorage.setItem(`player-${gameId}`, game.players[0].id);
+      }
       navigate(`/lobby/${gameId}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create game');
@@ -44,8 +48,15 @@ export default function HomePage() {
 
     try {
       console.log('Attempting to join game:', gameCode.trim());
-      await api.joinGame(gameCode.trim(), playerName.trim());
+      const { game } = await api.joinGame(gameCode.trim(), playerName.trim());
       console.log('Join successful, navigating to lobby');
+      
+      // Store player ID - find the player that was just added
+      const player = game.players.find(p => p.name === playerName.trim());
+      if (player) {
+        localStorage.setItem(`player-${gameCode.trim()}`, player.id);
+      }
+      
       navigate(`/lobby/${gameCode.trim()}`);
     } catch (err) {
       console.error('Join game error:', err);

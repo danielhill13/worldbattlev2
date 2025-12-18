@@ -14,7 +14,19 @@ export default function GamePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedTerritory, setSelectedTerritory] = useState<string | null>(null);
-  const [playerId, setPlayerId] = useState<string>('player-1'); // TODO: Get from auth/storage
+  const [playerId, setPlayerId] = useState<string>('');
+
+  // Get player ID from localStorage or default to first player for testing
+  useEffect(() => {
+    const storedPlayerId = localStorage.getItem(`player-${gameId}`);
+    if (storedPlayerId) {
+      setPlayerId(storedPlayerId);
+    } else if (game && game.players.length > 0) {
+      // Default to first player if not stored (for testing)
+      setPlayerId(game.players[0].id);
+      localStorage.setItem(`player-${gameId}`, game.players[0].id);
+    }
+  }, [gameId, game]);
 
   useEffect(() => {
     loadGame();
@@ -225,7 +237,7 @@ export default function GamePage() {
         {/* Sidebar - Takes 1 column */}
         <div className="space-y-4">
           {/* Phase-specific Actions */}
-          {isCurrentPlayer && !myPlayer?.isEliminated && (
+          {playerId && isCurrentPlayer && !myPlayer?.isEliminated && (
             <div className="card">
               {game.phase === 'REINFORCE' && gameId && (
                 <ReinforcementPanel
@@ -258,6 +270,14 @@ export default function GamePage() {
                   onTerritorySelect={setSelectedTerritory}
                 />
               )}
+            </div>
+          )}
+
+          {/* Loading Player Info */}
+          {!playerId && (
+            <div className="card text-center py-8">
+              <div className="text-4xl mb-3">🔄</div>
+              <p className="text-white font-semibold">Loading player data...</p>
             </div>
           )}
 
