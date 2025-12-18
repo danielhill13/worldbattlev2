@@ -43,10 +43,14 @@ export default function HomePage() {
     setError('');
 
     try {
+      console.log('Attempting to join game:', gameCode.trim());
       await api.joinGame(gameCode.trim(), playerName.trim());
+      console.log('Join successful, navigating to lobby');
       navigate(`/lobby/${gameCode.trim()}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to join game');
+      console.error('Join game error:', err);
+      const message = err instanceof Error ? err.message : 'Failed to join game';
+      setError(`${message} (Game ID: ${gameCode.trim().substring(0, 8)}...)`);
     } finally {
       setLoading(false);
     }
@@ -108,12 +112,14 @@ export default function HomePage() {
             </label>
             <input
               type="text"
-              className="input w-full"
-              placeholder="Enter game code"
+              className="input w-full font-mono text-sm"
+              placeholder="Paste game code here"
               value={gameCode}
-              onChange={(e) => setGameCode(e.target.value.toUpperCase())}
-              maxLength={36}
+              onChange={(e) => setGameCode(e.target.value.trim())}
             />
+            <p className="text-xs text-gray-500 mt-1">
+              Full game code from lobby (e.g., 550e8400-e29b-41d4-a716-446655440000)
+            </p>
           </div>
 
           <button

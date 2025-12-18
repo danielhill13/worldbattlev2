@@ -16,7 +16,10 @@ class ApiClient {
     endpoint: string,
     options: RequestInit = {}
   ): Promise<T> {
-    const response = await fetch(`${this.baseUrl}${endpoint}`, {
+    const url = `${this.baseUrl}${endpoint}`;
+    console.log(`API Request: ${options.method || 'GET'} ${url}`);
+    
+    const response = await fetch(url, {
       ...options,
       headers: {
         'Content-Type': 'application/json',
@@ -24,10 +27,13 @@ class ApiClient {
       },
     });
 
+    console.log(`API Response: ${response.status} ${response.statusText}`);
+
     if (!response.ok) {
       const error = await response.json().catch(() => ({ 
         error: { message: 'Request failed' } 
       }));
+      console.error('API Error:', error);
       throw new Error(error.error?.message || `HTTP ${response.status}`);
     }
 

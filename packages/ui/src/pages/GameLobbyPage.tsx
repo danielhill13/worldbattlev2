@@ -54,6 +54,8 @@ export default function GameLobbyPage() {
   const copyGameCode = () => {
     if (gameId) {
       navigator.clipboard.writeText(gameId);
+      // Optional: Show a toast notification
+      alert('Game code copied to clipboard!');
     }
   };
 
@@ -101,20 +103,23 @@ export default function GameLobbyPage() {
 
         {/* Game Code Card */}
         <div className="card">
-          <div className="flex items-center justify-between">
-            <div>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex-1">
               <p className="text-sm text-gray-400 mb-1">Game Code</p>
-              <p className="text-2xl font-mono font-bold text-white">
-                {gameId?.substring(0, 8).toUpperCase()}
+              <p className="text-lg font-mono text-white break-all">
+                {gameId}
               </p>
             </div>
             <button
               onClick={copyGameCode}
-              className="btn btn-secondary"
+              className="btn btn-secondary ml-4 shrink-0"
             >
               📋 Copy
             </button>
           </div>
+          <p className="text-xs text-gray-500">
+            Share this code with other players to join
+          </p>
         </div>
 
         {/* Players Card */}
