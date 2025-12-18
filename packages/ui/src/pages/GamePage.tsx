@@ -145,10 +145,36 @@ export default function GamePage() {
 
   // Get selectable territories based on phase
   const getSelectableTerritories = (): string[] => {
-    if (!isCurrentPlayer) return [];
+    if (!isCurrentPlayer || !gameId) return [];
     
-    // Territories will be made selectable by phase panels
+    if (game.phase === 'REINFORCE') {
+      // Can select any owned territory to reinforce
+      return game.territories
+        .filter(t => t.occupiedBy === playerId)
+        .map(t => t.territoryId);
+    }
+    
+    if (game.phase === 'ATTACK') {
+      // Can select territories with 2+ armies to attack from
+      // Or adjacent enemies if already selected attacker
+      return game.territories
+        .filter(t => t.occupiedBy === playerId && t.armies >= 2)
+        .map(t => t.territoryId);
+    }
+    
+    if (game.phase === 'FORTIFY') {
+      // Can select territories with 2+ armies to fortify from
+      return game.territories
+        .filter(t => t.occupiedBy === playerId && t.armies >= 2)
+        .map(t => t.territoryId);
+    }
+    
     return [];
+  };
+
+  const handleMapTerritoryClick = (territoryId: string) => {
+    setSelectedTerritory(territoryId);
+    handleTerritoryClick(territoryId);
   };
 
   return (
@@ -189,7 +215,7 @@ export default function GamePage() {
             <WorldMap
               game={game}
               currentPlayerId={playerId}
-              onTerritoryClick={handleTerritoryClick}
+              onTerritoryClick={handleMapTerritoryClick}
               selectedTerritory={selectedTerritory}
               selectableTerritories={getSelectableTerritories()}
             />
@@ -207,6 +233,7 @@ export default function GamePage() {
                   gameId={gameId}
                   playerId={playerId}
                   onUpdate={handleUpdate}
+                  selectedTerritory={selectedTerritory}
                 />
               )}
 

@@ -30,6 +30,26 @@ export default function AttackPanel({
   const myTerritories = game.territories.filter(t => t.occupiedBy === playerId);
   const attackableTerritories = myTerritories.filter(t => t.armies >= 2);
 
+  // Handle map territory selection
+  useEffect(() => {
+    if (!selectedTerritory) return;
+    
+    const territory = game.territories.find(t => t.territoryId === selectedTerritory);
+    if (!territory) return;
+    
+    // If it's our territory with 2+ armies and no attacker selected yet
+    if (!attackFrom && territory.occupiedBy === playerId && territory.armies >= 2) {
+      handleSelectAttacker(selectedTerritory);
+    }
+    // If attacker already selected and this is an enemy territory
+    else if (attackFrom && territory.occupiedBy !== playerId) {
+      const adjacentEnemies = getAdjacentEnemies(attackFrom);
+      if (adjacentEnemies.some(t => t.territoryId === selectedTerritory)) {
+        handleSelectDefender(selectedTerritory);
+      }
+    }
+  }, [selectedTerritory]);
+
   const getAdjacentEnemies = (fromTerritoryId: string) => {
     return game.territories.filter(
       t => t.occupiedBy !== playerId && 
@@ -63,10 +83,10 @@ export default function AttackPanel({
       setLastResult(result.attackResult);
       
       if (result.attackResult.territoryConquered) {
-        // Show move armies UI
-        const fromTerritory = game.territories.find(t => t.territoryId === attackFrom);
+        // Set default move armies to maximum available (all but 1)
+        const fromTerritory = result.game.territories.find(t => t.territoryId === attackFrom);
         if (fromTerritory) {
-          setMoveArmies(Math.min(fromTerritory.armies - 1, 3));
+          setMoveArmies(fromTerritory.armies - 1);
         }
       } else {
         setAttackFrom(null);

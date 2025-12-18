@@ -7,13 +7,15 @@ interface ReinforcementPanelProps {
   gameId: string;
   playerId: string;
   onUpdate: () => void;
+  selectedTerritory: string | null;
 }
 
 export default function ReinforcementPanel({
   game,
   gameId,
   playerId,
-  onUpdate
+  onUpdate,
+  selectedTerritory
 }: ReinforcementPanelProps) {
   const [reinforcementInfo, setReinforcementInfo] = useState<any>(null);
   const [placements, setPlacements] = useState<Record<string, number>>({});
@@ -26,6 +28,16 @@ export default function ReinforcementPanel({
   useEffect(() => {
     loadReinforcementInfo();
   }, [gameId, playerId]);
+
+  // Handle map clicks for quick reinforcement
+  useEffect(() => {
+    if (selectedTerritory && remaining > 0) {
+      const territory = myTerritories.find(t => t.territoryId === selectedTerritory);
+      if (territory) {
+        addArmy(selectedTerritory);
+      }
+    }
+  }, [selectedTerritory]);
 
   const loadReinforcementInfo = async () => {
     try {
@@ -45,12 +57,26 @@ export default function ReinforcementPanel({
     return reinforcementInfo.reinforcementsRemaining - getTotalPlaced();
   };
 
+  const getTradeValue = () => {
+    // Card trade values increase with each trade
+    const tradeCount = game.players.reduce((sum, p) => sum + p.cardSetsTraded, 0);
+    return 4 + (tradeCount * 2);
+  };
+
   const addArmy = (territoryId: string) => {
+    // Validate territory is owned by player
+    const territory = myTerritories.find(t => t.territoryId === territoryId);
+    if (!territory) {
+      setError('You do not own this territory');
+      return;
+    }
+    
     if (getRemainingArmies() > 0) {
       setPlacements(prev => ({
         ...prev,
         [territoryId]: (prev[territoryId] || 0) + 1
       }));
+      setError(''); // Clear any previous errors
     }
   };
 
@@ -116,7 +142,7 @@ export default function ReinforcementPanel({
   }
 
   const remaining = getRemainingArmies();
-  const canEndPhase = reinforcementInfo.reinforcementsRemaining === 0 && !reinforcementInfo.mustTradeCards;
+  const canEndPhase = remaining === 0 && !reinforcementInfo.mustTradeCards;
 
   return (
     <div className="space-y-4">
@@ -149,31 +175,52 @@ export default function ReinforcementPanel({
       </div>
 
       {/* Card Trading */}
-      {player && player.cards.length >= 3 && (
+      {player && player.cards.length > 0 && (
         <div className="bg-gray-700 rounded-lg p-4">
           <h3 className="font-bold text-white mb-2">
-            Cards ({player.cards.length})
+            Your Cards ({player.cards.length})
             {reinforcementInfo.mustTradeCards && (
               <span className="text-danger-500 text-sm ml-2">MUST TRADE!</span>
             )}
           </h3>
           
-          <div className="space-y-2 mb-3">
-            {reinforcementInfo.possibleCardSets.length > 0 ? (
-              reinforcementInfo.possibleCardSets.slice(0, 2).map((set: string[], idx: number) => (
-                <button
-                  key={idx}
-                  onClick={() => handleTradeCards(set)}
-                  disabled={loading}
-                  className="btn btn-secondary w-full text-sm"
-                >
-                  Trade Set {idx + 1}
-                </button>
-              ))
-            ) : (
-              <p className="text-gray-400 text-sm">No valid card sets to trade</p>
-            )}
+          {/* Card Display */}
+          <div className="grid grid-cols-3 gap-2 mb-3">
+            {player.cards.map((card, idx) => (
+              <div
+                key={idx}
+                className="bg-gray-800 rounded p-2 text-center border border-gray-600"
+              >
+                <div className="text-2xl mb-1">
+                  {card.type === 'INFANTRY' && '🪖'}
+                  {card.type === 'CAVALRY' && '🐎'}
+                  {card.type === 'ARTILLERY' && '💣'}
+                  {card.type === 'WILD' && '🃏'}
+                </div>
+                <p className="text-xs text-gray-400">{card.type}</p>
+              </div>
+            ))}
           </div>
+          
+          {/* Trade Options */}
+          {player.cards.length >= 3 && (
+            <div className="space-y-2">
+              {reinforcementInfo.possibleCardSets.length > 0 ? (
+                reinforcementInfo.possibleCardSets.slice(0, 2).map((set: string[], idx: number) => (
+                  <button
+                    key={idx}
+                    onClick={() => handleTradeCards(set)}
+                    disabled={loading}
+                    className="btn btn-secondary w-full text-sm"
+                  >
+                    Trade Set {idx + 1} for +{getTradeValue()} Armies
+                  </button>
+                ))
+              ) : (
+                <p className="text-gray-400 text-sm">No valid card sets to trade yet</p>
+              )}
+            </div>
+          )}
         </div>
       )}
 
