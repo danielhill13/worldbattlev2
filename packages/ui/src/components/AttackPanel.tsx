@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { GameState, areTerritoriesAdjacent } from '@world-battle/engine';
+import { GameState } from '@world-battle/engine';
 import api from '../utils/api';
+import { areTerritoriesAdjacentUI } from '../utils/adjacency';
 
 interface AttackPanelProps {
   game: GameState;
@@ -32,7 +33,7 @@ export default function AttackPanel({
   const getAdjacentEnemies = (fromTerritoryId: string) => {
     return game.territories.filter(
       t => t.occupiedBy !== playerId && 
-      areTerritoriesAdjacent(fromTerritoryId, t.territoryId)
+      areTerritoriesAdjacentUI(fromTerritoryId, t.territoryId)
     );
   };
 
