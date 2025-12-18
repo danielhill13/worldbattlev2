@@ -140,7 +140,7 @@ Player must own ALL territories in a continent:
 - Less than 3 cards
 - Mixed types without having all three (e.g., 2 Infantry + 1 Cavalry)
 
-**Army Rewards (Classic Risk):**
+**Army Rewards (Classic):**
 - Formula: 2 + (2 × card_count)
 - 3 cards → 8 armies
 - 4 cards → 10 armies
@@ -159,7 +159,7 @@ Player must own ALL territories in a continent:
 - [ ] Card trading accepts valid sets
 - [ ] Card trading rejects invalid sets
 - [ ] Mandatory trading enforced at 5+ cards
-- [ ] Army rewards match Classic Risk values
+- [ ] Army rewards match Classic values
 - [ ] Demo runs successfully
 
 ## API Design Notes

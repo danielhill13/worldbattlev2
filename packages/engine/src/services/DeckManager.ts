@@ -7,7 +7,7 @@ import { TERRITORIES } from '../data/mapData';
 export class DeckManager {
   /**
    * Create a shuffled deck with cards for all territories
-   * Classic Risk: 42 territory cards, 2 wild cards
+   * Classic: 42 territory cards, 2 wild cards
    * For MVP: Just territory cards with types distributed evenly
    */
   static createDeck(): Card[] {

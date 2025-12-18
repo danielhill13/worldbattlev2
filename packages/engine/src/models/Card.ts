@@ -1,5 +1,5 @@
 /**
- * Card types in the game (classic Risk style)
+ * Card types in the game (classic style)
  */
 export enum CardType {
   INFANTRY = 'INFANTRY',
@@ -18,7 +18,7 @@ export interface Card {
 
 /**
  * Card set trade-in values
- * Classic Risk: 3 cards = 4, 4 cards = 6, 5 cards = 8, 6 cards = 10, etc.
+ * Classic: 3 cards = 4, 4 cards = 6, 5 cards = 8, 6 cards = 10, etc.
  */
 export function getArmiesForCardCount(cardCount: number): number {
   if (cardCount < 3) {

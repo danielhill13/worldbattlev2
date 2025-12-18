@@ -5,7 +5,7 @@ import { TERRITORIES } from '../data/mapData';
 import { DeckManager } from './DeckManager';
 
 /**
- * Initial army counts by player count (Classic Risk)
+ * Initial army counts by player count (Classic)
  */
 const INITIAL_ARMIES: Record<number, number> = {
   2: 40,

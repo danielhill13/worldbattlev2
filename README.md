@@ -1,13 +1,13 @@
-# World Battle - Risk-like Strategy Game
+# World Battle - A Strategy Game
 
-A web-based strategy game inspired by Risk, built with TypeScript, Node.js, and React.
+A web-based strategy game, built with TypeScript, Node.js, and React.
 
 ## Project Structure
 
 ```
 world-battle/
 ├── packages/
-│   ├── engine/          # Pure game logic (COMPLETE ✅)
+│   ├── engine/          # Pure game logic (Phase 1 Complete)
 │   ├── api/             # Express REST API (Phase 2)
 │   └── ui/              # React frontend (Phase 3)
 └── package.json         # Workspace root
@@ -15,7 +15,7 @@ world-battle/
 
 ## Development Status
 
-### ✅ Phase 1: Game Engine Core - COMPLETE!
+### Phase 1: Game Engine Core
 
 All four checkpoints completed with **162 tests passing**:
 
@@ -28,29 +28,29 @@ All four checkpoints completed with **162 tests passing**:
 
 ## Features Implemented
 
-### 🗺️ Map & Territories
+###  Map & Territories
 - 42 territories across 6 continents
 - Bidirectional adjacency validation
 - Cross-continent connections (Alaska↔Kamchatka, Brazil↔North Africa, etc.)
 
-### 👥 Player Management
+###  Player Management
 - 2-6 player support
 - Unique colors (RED, BLUE, GREEN, YELLOW, BLACK, PURPLE)
 - Player elimination tracking
 
-### 🎲 Game Initialization
+###  Game Initialization
 - Random territory distribution (round-robin)
 - Initial army allocation (40/35/30/25/20 by player count)
 - Random army placement across owned territories
 - Shuffled turn order
 
-### 💪 Reinforcements
+###  Reinforcements
 - Territory-based bonuses (÷3, min 3)
 - Continent control bonuses (2-7 armies)
 - Card trading system (3+ cards → armies)
 - Mandatory trading at 5+ cards
 
-### ⚔️ Battle System
+###  Battle System
 - Dice-based combat (1-6 per die)
 - Attack validation (adjacency, army count, ownership)
 - Dice count rules:
@@ -61,10 +61,10 @@ All four checkpoints completed with **162 tests passing**:
 - Territory conquest mechanics
 - Army movement after conquest
 
-### 🃏 Card System
+###  Card System
 - Three card types (Infantry, Cavalry, Artillery)
 - Card trading validation
-- Classic Risk rewards (3=8, 4=10, 5=12, 6=14, etc.)
+- Classic rewards (3=8, 4=10, 5=12, 6=14, etc.)
 - Trade set recommendations
 
 ## Getting Started

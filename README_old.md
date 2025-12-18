@@ -1,6 +1,6 @@
-# World Battle - Risk-like Strategy Game
+# World Battle - A Strategy Game
 
-A web-based strategy game inspired by Risk, built with TypeScript, Node.js, and React.
+A web-based strategy game, built with TypeScript, Node.js, and React.
 
 ## Project Structure
 

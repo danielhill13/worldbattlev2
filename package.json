@@ -1,7 +1,7 @@
 {
   "name": "world-battle",
   "version": "1.0.0",
-  "description": "World Battle - Risk-like Strategy Game",
+  "description": "World Battle - A Strategy Game",
   "private": true,
   "workspaces": [
     "packages/*"

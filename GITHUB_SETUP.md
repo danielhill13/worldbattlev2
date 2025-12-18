@@ -4,7 +4,7 @@
 
 1. Go to https://github.com/new
 2. Repository name: `world-battle`
-3. Description: "Risk-like strategy game - TypeScript monorepo"
+3. Description: "Strategy game - TypeScript monorepo"
 4. **Leave "Initialize with README" UNCHECKED** (we already have one)
 5. Click "Create repository"
 

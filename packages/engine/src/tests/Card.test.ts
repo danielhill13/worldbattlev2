@@ -8,7 +8,7 @@ describe('Card Model', () => {
       expect(getArmiesForCardCount(2)).toBe(0);
     });
 
-    test('should return correct army count for card trades (Classic Risk)', () => {
+    test('should return correct army count for card trades (Classic)', () => {
       expect(getArmiesForCardCount(3)).toBe(8); // 2 + (2 * 3) = 8
       expect(getArmiesForCardCount(4)).toBe(10); // 2 + (2 * 4) = 10
       expect(getArmiesForCardCount(5)).toBe(12); // 2 + (2 * 5) = 12
